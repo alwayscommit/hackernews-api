@@ -16,7 +16,7 @@ public class HackerNewsCacheServiceImpl implements HackerNewsCacheService {
 	@Autowired
 	private CacheManager cacheManager;
 
-	@Scheduled(fixedRateString = "${clear.all.cache.fixed.rate}", initialDelay = 0)
+	@Scheduled(fixedRateString = "${clear.cache.fixed.rate}", initialDelay = 0)
 	public void clearCache() {
 		cacheManager.getCache(Constants.CACHE_HACKER_NEWS).clear();
 	}

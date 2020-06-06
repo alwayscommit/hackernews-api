@@ -1,9 +1,11 @@
 package com.hackernews.api.repository;
 
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.data.repository.reactive.ReactiveSortingRepository;
+import org.springframework.stereotype.Repository;
 
 import com.hackernews.api.model.Item;
 
-public interface ItemRepository extends ReactiveCrudRepository<Item, Integer>{
+@Repository
+public interface ItemRepository extends ReactiveSortingRepository<Item, Integer>{
 
 }

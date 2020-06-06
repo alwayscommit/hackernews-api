@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.hackernews.api.Constants;
@@ -27,6 +28,8 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 	private ItemRepository itemRepository;
 
 	private HackerNewsCacheService hackerNewsCacheService;
+
+	private static final String SORT_FIELD = "score";
 
 	@Autowired
 	public HackerNewsServiceImpl(HackerNewsDAO hackerNewsDAO, ItemRepository itemRepository,
@@ -86,6 +89,18 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		}
 	}
 
+	@Override
+	public Flux<Item> getPastStories() {
+		LOGGER.info("Fetching past stories...");
+		return itemRepository.findAll(Sort.by(SORT_FIELD).descending());
+	}
+
+	@Override
+	public Flux<Item> getPastStories(Integer page, Integer size) {
+		LOGGER.info(String.format("Fetching past stories with page %s and size %s", page, size));
+		return itemRepository.findAll(Sort.by(SORT_FIELD).descending()).skip(page * size).take(size);
+	}
+
 	private long calculateElapsedMinutes(Long storyTime) {
 		return ((nowEpochSeconds() - storyTime) / Constants.MINUTES_DIVISOR);
 	}
@@ -93,4 +108,5 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 	private long nowEpochSeconds() {
 		return (Instant.now().getEpochSecond());
 	}
+
 }

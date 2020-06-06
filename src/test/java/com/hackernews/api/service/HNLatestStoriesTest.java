@@ -34,7 +34,7 @@ class HNLatestStoriesTest {
 
 	@MockBean
 	private ItemRepository itemRepository;
-	
+
 	@MockBean
 	private HackerNewsCacheService hackerNewsCacheService;
 
