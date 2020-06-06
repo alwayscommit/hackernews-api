@@ -1,6 +1,5 @@
 package com.hackernews.api.service;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,19 +25,22 @@ import reactor.core.publisher.Mono;
 
 @SpringBootTest
 @RunWith(JUnitPlatform.class)
-class HackerNewsServiceImplTest {
+class HNLatestStoriesTest {
 
 	private HackerNewsServiceImpl hackerNewsServiceImpl;
 
 	@MockBean
 	private HackerNewsDAO hackerNewsDAO;
-	
+
 	@MockBean
 	private ItemRepository itemRepository;
 	
+	@MockBean
+	private HackerNewsCacheService hackerNewsCacheService;
+
 	@BeforeEach
 	void setUp() {
-		hackerNewsServiceImpl = new HackerNewsServiceImpl(hackerNewsDAO, itemRepository);
+		hackerNewsServiceImpl = new HackerNewsServiceImpl(hackerNewsDAO, itemRepository, hackerNewsCacheService);
 	}
 
 	@Test
@@ -118,7 +120,7 @@ class HackerNewsServiceImplTest {
 			itemList.get(i).setTime(Instant.now().minusSeconds(600).getEpochSecond());
 		}
 		// 8-4 to < 8 = 4, 5, 6, 7
-		for (int i = positiveTestSize; i < itemList.size(); i++) {
+		for (int i = positiveTestSize; i < totalSize; i++) {
 			// Set to older than 10 minutes
 			itemList.get(i).setTime(Instant.now().minusSeconds(661).getEpochSecond());
 		}
@@ -138,18 +140,18 @@ class HackerNewsServiceImplTest {
 
 		List<Integer> intList = itemList.stream().map(e -> e.getId()).collect(Collectors.toList());
 		Mockito.when(hackerNewsDAO.getNewStories()).thenReturn(Flux.fromIterable(intList));
-		
+
 		for (int i = 0; i < itemList.size(); i++) {
 			// Set to less than 10 minutes
 			itemList.get(i).setTime(Instant.now().minusSeconds(600).getEpochSecond());
 		}
 
-		//These have an item associated with itemId
+		// These have an item associated with itemId
 		for (int i = 0; i < positiveTestSize; i++) {
 			Mockito.when(hackerNewsDAO.getStory(itemList.get(i).getId())).thenReturn(Mono.just(itemList.get(i)));
 		}
 
-		//These do have an item associated with itemId
+		// These do have an item associated with itemId
 		for (int i = positiveTestSize; i < totalSize; i++) {
 			Mockito.when(hackerNewsDAO.getStory(itemList.get(i).getId())).thenReturn(Mono.empty());
 		}

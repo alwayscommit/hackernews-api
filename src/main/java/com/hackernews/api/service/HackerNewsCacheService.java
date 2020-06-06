@@ -10,4 +10,5 @@ public interface HackerNewsCacheService {
 
 	public void cache(String key, List<Item> itemList);
 
+	public boolean isCached(String key);
 }
