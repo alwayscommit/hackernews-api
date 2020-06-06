@@ -48,8 +48,10 @@ class HNLatestStoriesTest {
 		Mockito.when(hackerNewsDAO.getNewStories()).thenReturn(Flux.empty());
 		Mockito.when(hackerNewsDAO.getStory(Mockito.anyInt())).thenReturn(Mono.empty());
 		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.empty());
+		Mockito.when(hackerNewsCacheService.isCached(Mockito.anyString())).thenReturn(false);
 		Flux<Item> itemList = hackerNewsServiceImpl.getLatestStories();
-		assertNull(itemList);
+		long actualSize = itemList.count().block();
+		assertEquals(0, actualSize);
 	}
 
 	@Test
@@ -59,8 +61,11 @@ class HNLatestStoriesTest {
 		item.setTime(Instant.now().minusMillis(300000).getEpochSecond());
 		Mockito.when(hackerNewsDAO.getNewStories()).thenReturn(Flux.just(23425780));
 		Mockito.when(hackerNewsDAO.getStory(Mockito.anyInt())).thenReturn(Mono.just(item));
+		Mockito.when(hackerNewsCacheService.isCached(Mockito.anyString())).thenReturn(false);
+		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.just(item));
 		Flux<Item> itemList = hackerNewsServiceImpl.getLatestStories();
-		assertEquals("sanjanamane", itemList.blockFirst().getBy());
+		String actualUser = itemList.blockFirst().getBy();
+		assertEquals("sanjanamane", actualUser);
 	}
 
 	@Test
@@ -70,8 +75,10 @@ class HNLatestStoriesTest {
 		item.setTime(Instant.now().minusMillis(700000).getEpochSecond());
 		Mockito.when(hackerNewsDAO.getNewStories()).thenReturn(Flux.just(23425780));
 		Mockito.when(hackerNewsDAO.getStory(Mockito.anyInt())).thenReturn(Mono.just(item));
+		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.empty());
 		Flux<Item> itemList = hackerNewsServiceImpl.getLatestStories();
-		assertEquals(0, itemList.toStream().count());
+		long actualSize = itemList.count().block();
+		assertEquals(0, actualSize);
 	}
 
 	@Test

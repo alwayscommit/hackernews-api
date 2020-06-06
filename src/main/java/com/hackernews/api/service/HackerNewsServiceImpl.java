@@ -52,10 +52,12 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 //			TODO REMOVE LATER
 //			Flux<Integer> newStoryIds = Flux.fromStream(hackerNewsDAO.getNewStories().toStream().limit(20));
 
-			Flux<Item> storyList = newStoryIds.flatMap(storyId -> hackerNewsDAO.getStory(storyId))
+			Flux<Item> storyList = newStoryIds.flatMap(storyId -> hackerNewsDAO.getStory(storyId));
+
+			Flux<Item> storiesWithin10Mins = storyList
 					.filter(story -> calculateElapsedMinutes(story.getTime()) <= Constants.CACHE_TIME);
 
-			List<Item> latestStories = storyList.toStream().collect(Collectors.toList());
+			List<Item> latestStories = storiesWithin10Mins.toStream().collect(Collectors.toList());
 
 			hackerNewsCacheService.cache(Constants.KEY_LATEST_STORY, latestStories);
 
@@ -72,17 +74,17 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		} else {
 			LOGGER.info("Fetching Top Stories from Hacker-News API...");
 
-//			Flux<Integer> topStoryIds = hackerNewsDAO.getTopStories();
+			Flux<Integer> topStoryIds = hackerNewsDAO.getTopStories();
 
 //			TODO REMOVE LATER
-			Flux<Integer> topStoryIds = Flux.fromStream(hackerNewsDAO.getTopStories().toStream().limit(20));
+//			Flux<Integer> topStoryIds = Flux.fromStream(hackerNewsDAO.getTopStories().toStream().limit(20));
 
-			Flux<Item> storyList = topStoryIds.flatMap(storyId -> hackerNewsDAO.getStory(storyId))
-					.filter(item -> item.getType().equals(Type.STORY))
-					.filter(story -> calculateElapsedMinutes(story.getTime()) <= Constants.CACHE_TIME)
+			Flux<Item> itemList = topStoryIds.flatMap(storyId -> hackerNewsDAO.getStory(storyId));
+			Flux<Item> storyList = itemList.filter(item -> item.getType().equals(Type.STORY));
+			Flux<Item> scoredStoryList = storyList
 					.sort((story, nextSory) -> nextSory.getScore().compareTo(story.getScore()));
 
-			List<Item> topStories = storyList.toStream().limit(10).collect(Collectors.toList());
+			List<Item> topStories = scoredStoryList.toStream().limit(10).collect(Collectors.toList());
 
 			hackerNewsCacheService.cache(Constants.KEY_TOP_STORY, topStories);
 
