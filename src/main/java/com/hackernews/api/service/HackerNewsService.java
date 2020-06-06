@@ -8,4 +8,6 @@ public interface HackerNewsService {
 
 	public Flux<Item> getLatestStories();
 	
+	public Flux<Item> getTopStories();
+	
 }

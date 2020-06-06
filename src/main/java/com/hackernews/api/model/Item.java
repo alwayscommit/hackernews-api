@@ -2,8 +2,13 @@ package com.hackernews.api.model;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Item {
 
+	@Id
 	private Integer id;
 	private String by;
 	private Integer descendants;
@@ -18,21 +23,6 @@ public class Item {
 
 	public Item() {
 	}
-
-	public Item(Integer id, String by, Integer descendants, List<Long> kids, Integer score, Long time, String title,
-			Type type, String url, String text) {
-		this.id = id;
-		this.by = by;
-		this.descendants = descendants;
-		this.kids = kids;
-		this.score = score;
-		this.time = time;
-		this.title = title;
-		this.type = type;
-		this.url = url;
-		this.text = text;
-	}
-
 	public Long getParent() {
 		return parent;
 	}

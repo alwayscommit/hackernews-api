@@ -19,8 +19,12 @@ public class HackerNewsDAOImpl implements HackerNewsDAO {
 
 	@Override
 	public Mono<Item> getStory(Integer itemId) {
-		return WebClient.create().get().uri(String.format(Constants.URL_ITEM, itemId)).retrieve()
-				.bodyToMono(Item.class);
+		return WebClient.create().get().uri(String.format(Constants.URL_ITEM, itemId)).retrieve().bodyToMono(Item.class);
+	}
+
+	@Override
+	public Flux<Integer> getTopStories() {
+		return WebClient.create().get().uri(Constants.URL_TOP_STORIES).retrieve().bodyToFlux(Integer.class);
 	}
 
 }

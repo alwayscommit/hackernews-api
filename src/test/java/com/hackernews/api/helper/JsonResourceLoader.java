@@ -10,7 +10,7 @@ import com.hackernews.api.model.Item;
 
 public class JsonResourceLoader {
 
-	private static final String TEST_RESOURCE_URL = "src/test/resources/com/hackernews/api/json/";
+	private static final String TEST_RESOURCE_URL = "src/test/resources/";
 
 	public static Item getItem(String fileName) {
 		try {

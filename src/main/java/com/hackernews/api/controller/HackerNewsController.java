@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hackernews.api.model.Item;
-import com.hackernews.api.service.HackerNewsServiceImpl;
+import com.hackernews.api.service.HackerNewsService;
 
 import reactor.core.publisher.Flux;
 
@@ -19,11 +19,16 @@ public class HackerNewsController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HackerNewsController.class);
 
 	@Autowired
-	private HackerNewsServiceImpl hackerNewsService;
+	private HackerNewsService hackerNewsService;
 
 	@GetMapping(path = "/latest-stories")
-	public Flux<Item> getItem() {
+	public Flux<Item> getLatestStories() {
 		return hackerNewsService.getLatestStories();
+	}
+	
+	@GetMapping(path = "/top-stories")
+	public Flux<Item> getTopStories() {
+		return hackerNewsService.getTopStories();
 	}
 	
 }

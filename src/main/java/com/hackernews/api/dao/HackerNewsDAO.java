@@ -12,5 +12,7 @@ public interface HackerNewsDAO {
 
 	public Mono<Item> getStory(Integer id);
 
+	public Flux<Integer> getTopStories();
+
 
 }

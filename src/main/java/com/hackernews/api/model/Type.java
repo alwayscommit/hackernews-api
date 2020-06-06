@@ -7,6 +7,8 @@ public enum Type {
 	@JsonProperty("story")
 	STORY, 
 	@JsonProperty("comment")
-	COMMENT;
+	COMMENT,
+	@JsonProperty("job")
+	JOB;
 
 }

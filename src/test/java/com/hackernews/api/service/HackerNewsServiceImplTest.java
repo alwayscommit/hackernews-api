@@ -1,7 +1,8 @@
 package com.hackernews.api.service;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 import java.time.Instant;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import com.hackernews.api.dao.HackerNewsDAO;
 import com.hackernews.api.helper.JsonResourceLoader;
 import com.hackernews.api.model.Item;
+import com.hackernews.api.repository.ItemRepository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -30,18 +32,22 @@ class HackerNewsServiceImplTest {
 
 	@MockBean
 	private HackerNewsDAO hackerNewsDAO;
-
+	
+	@MockBean
+	private ItemRepository itemRepository;
+	
 	@BeforeEach
 	void setUp() {
-		hackerNewsServiceImpl = new HackerNewsServiceImpl(hackerNewsDAO);
+		hackerNewsServiceImpl = new HackerNewsServiceImpl(hackerNewsDAO, itemRepository);
 	}
 
 	@Test
 	void testMockDAO() {
 		Mockito.when(hackerNewsDAO.getNewStories()).thenReturn(Flux.empty());
 		Mockito.when(hackerNewsDAO.getStory(Mockito.anyInt())).thenReturn(Mono.empty());
+		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.empty());
 		Flux<Item> itemList = hackerNewsServiceImpl.getLatestStories();
-		assertEquals(0, itemList.toStream().count());
+		assertNull(itemList);
 	}
 
 	@Test
