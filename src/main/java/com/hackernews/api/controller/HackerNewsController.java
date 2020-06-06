@@ -19,8 +19,12 @@ public class HackerNewsController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(HackerNewsController.class);
 
-	@Autowired
 	private HackerNewsService hackerNewsService;
+
+	@Autowired
+	public HackerNewsController(HackerNewsService hackerNewsService) {
+		this.hackerNewsService = hackerNewsService;
+	}
 
 	@GetMapping(path = "/latest-stories")
 	public Flux<Item> getLatestStories() {
@@ -40,7 +44,7 @@ public class HackerNewsController {
 		return hackerNewsService.getPastStories();
 	}
 
-	@GetMapping(path = "/past-stories-paginated")
+	@GetMapping(path = "/past-stories-paged")
 	public Flux<Item> getPastStoriesPaginated(@RequestParam(name = "page", defaultValue = "0") Integer page,
 			@RequestParam(name = "size", defaultValue = "10") Integer size) {
 		LOGGER.info("Fetching past stories with pagination...");

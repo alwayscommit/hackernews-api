@@ -23,7 +23,7 @@ public class JsonResourceLoader {
 		}
 	}
 
-	public static List<Item> getTopItems(String fileName) {
+	public static List<Item> getItemList(String fileName) {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			List<Item> topStoryList = Arrays.asList(objectMapper.readValue(getFile(fileName), Item[].class));

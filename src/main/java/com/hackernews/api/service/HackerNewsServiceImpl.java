@@ -47,10 +47,10 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		} else {
 			LOGGER.info("Fetching Latest Stories from Hacker-News API...");
 
-			Flux<Integer> newStoryIds = hackerNewsDAO.getNewStories();
+//			Flux<Integer> newStoryIds = hackerNewsDAO.getNewStories();
 
 //			TODO REMOVE LATER
-//			Flux<Integer> newStoryIds = Flux.fromStream(hackerNewsDAO.getNewStories().toStream().limit(20));
+			Flux<Integer> newStoryIds = Flux.fromStream(hackerNewsDAO.getNewStories().toStream().limit(20));
 
 			Flux<Item> storyList = newStoryIds.flatMap(storyId -> hackerNewsDAO.getStory(storyId));
 
@@ -61,7 +61,9 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 
 			hackerNewsCacheService.cache(Constants.KEY_LATEST_STORY, latestStories);
 
-			return itemRepository.saveAll(latestStories);
+			saveStoriesInDB(latestStories);
+
+			return Flux.fromIterable(latestStories);
 
 		}
 	}
@@ -74,22 +76,30 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		} else {
 			LOGGER.info("Fetching Top Stories from Hacker-News API...");
 
-			Flux<Integer> topStoryIds = hackerNewsDAO.getTopStories();
+//			Flux<Integer> topStoryIds = hackerNewsDAO.getTopStories();
 
 //			TODO REMOVE LATER
-//			Flux<Integer> topStoryIds = Flux.fromStream(hackerNewsDAO.getTopStories().toStream().limit(20));
+			Flux<Integer> topStoryIds = Flux.fromStream(hackerNewsDAO.getTopStories().toStream().limit(20));
 
 			Flux<Item> itemList = topStoryIds.flatMap(storyId -> hackerNewsDAO.getStory(storyId));
+
 			Flux<Item> storyList = itemList.filter(item -> item.getType().equals(Type.STORY));
-			Flux<Item> scoredStoryList = storyList
+
+			Flux<Item> topScoredStoryList = storyList
 					.sort((story, nextSory) -> nextSory.getScore().compareTo(story.getScore()));
 
-			List<Item> topStories = scoredStoryList.toStream().limit(10).collect(Collectors.toList());
+			List<Item> top10Stories = topScoredStoryList.toStream().limit(10).collect(Collectors.toList());
 
-			hackerNewsCacheService.cache(Constants.KEY_TOP_STORY, topStories);
+			hackerNewsCacheService.cache(Constants.KEY_TOP_STORY, top10Stories);
 
-			return itemRepository.saveAll(topStories);
+			saveStoriesInDB(top10Stories);
+
+			return Flux.fromIterable(top10Stories);
 		}
+	}
+
+	private void saveStoriesInDB(List<Item> latestStories) {
+		itemRepository.saveAll(latestStories).subscribe();
 	}
 
 	@Override

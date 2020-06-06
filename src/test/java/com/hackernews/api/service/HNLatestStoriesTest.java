@@ -1,6 +1,5 @@
 package com.hackernews.api.service;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Instant;
@@ -82,23 +81,27 @@ class HNLatestStoriesTest {
 	}
 
 	@Test
-	void testMultipleItemLessThan10Mins() {
-		List<Item> itemList = JsonResourceLoader.getTopItems("top-stories.json");
+	void testItemsLessThan10Mins() {
+		List<Item> itemList = JsonResourceLoader.getItemList("top-stories.json");
 		List<Integer> intList = itemList.stream().map(e -> e.getId()).collect(Collectors.toList());
 		Mockito.when(hackerNewsDAO.getNewStories()).thenReturn(Flux.fromIterable(intList));
+		
 		for (int i = 0; i < itemList.size(); i++) {
 			itemList.get(i).setTime(Instant.now().minusSeconds(600).getEpochSecond());
 		}
+		
 		for (int i = 0; i < itemList.size(); i++) {
 			Mockito.when(hackerNewsDAO.getStory(itemList.get(i).getId())).thenReturn(Mono.just(itemList.get(i)));
 		}
+		
+		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.fromIterable(itemList));
 		Flux<Item> topStories = hackerNewsServiceImpl.getLatestStories();
 		assertEquals(itemList.size(), topStories.toStream().count());
 	}
 
 	@Test
-	void testMultipleItemGreaterThan10Mins() {
-		List<Item> itemList = JsonResourceLoader.getTopItems("top-stories.json");
+	void testItemsOlderThan10Mins() {
+		List<Item> itemList = JsonResourceLoader.getItemList("top-stories.json");
 		List<Integer> intList = itemList.stream().map(e -> e.getId()).collect(Collectors.toList());
 		Mockito.when(hackerNewsDAO.getNewStories()).thenReturn(Flux.fromIterable(intList));
 		for (int i = 0; i < itemList.size(); i++) {
@@ -108,13 +111,14 @@ class HNLatestStoriesTest {
 		for (int i = 0; i < itemList.size(); i++) {
 			Mockito.when(hackerNewsDAO.getStory(itemList.get(i).getId())).thenReturn(Mono.just(itemList.get(i)));
 		}
+		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.fromIterable(itemList));
 		Flux<Item> topStories = hackerNewsServiceImpl.getLatestStories();
 		assertEquals(0, topStories.toStream().count());
 	}
 
 	@Test
 	void testMultipleItemGreaterAndLessThan10Mins() {
-		List<Item> itemList = JsonResourceLoader.getTopItems("top-stories.json");
+		List<Item> itemList = JsonResourceLoader.getItemList("top-stories.json");
 
 		int totalSize = itemList.size();
 		int positiveTestSize = 3;
@@ -134,13 +138,14 @@ class HNLatestStoriesTest {
 		for (int i = 0; i < itemList.size(); i++) {
 			Mockito.when(hackerNewsDAO.getStory(itemList.get(i).getId())).thenReturn(Mono.just(itemList.get(i)));
 		}
+		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.fromIterable(itemList));
 		Flux<Item> topStories = hackerNewsServiceImpl.getLatestStories();
 		assertEquals(positiveTestSize, topStories.toStream().count());
 	}
 
 	@Test
 	void testMultipleItemSomeNullMins() {
-		List<Item> itemList = JsonResourceLoader.getTopItems("top-stories.json");
+		List<Item> itemList = JsonResourceLoader.getItemList("top-stories.json");
 
 		int totalSize = itemList.size();
 		int positiveTestSize = 3;
@@ -162,7 +167,7 @@ class HNLatestStoriesTest {
 		for (int i = positiveTestSize; i < totalSize; i++) {
 			Mockito.when(hackerNewsDAO.getStory(itemList.get(i).getId())).thenReturn(Mono.empty());
 		}
-
+		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.fromIterable(itemList));
 		Flux<Item> topStories = hackerNewsServiceImpl.getLatestStories();
 		assertEquals(positiveTestSize, topStories.toStream().count());
 	}
