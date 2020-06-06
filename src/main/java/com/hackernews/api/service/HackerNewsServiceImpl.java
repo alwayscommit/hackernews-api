@@ -47,10 +47,10 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		} else {
 			LOGGER.info("Fetching Latest Stories from Hacker-News API...");
 
-//			Flux<Integer> newStoryIds = hackerNewsDAO.getNewStories();
+			Flux<Integer> newStoryIds = hackerNewsDAO.getNewStories();
 
 //			TODO REMOVE LATER
-			Flux<Integer> newStoryIds = Flux.fromStream(hackerNewsDAO.getNewStories().toStream().limit(20));
+//			Flux<Integer> newStoryIds = Flux.fromStream(hackerNewsDAO.getNewStories().toStream().limit(20));
 
 			Flux<Item> storyList = newStoryIds.flatMap(storyId -> hackerNewsDAO.getStory(storyId))
 					.filter(story -> calculateElapsedMinutes(story.getTime()) <= Constants.CACHE_TIME);
@@ -79,6 +79,7 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 
 			Flux<Item> storyList = topStoryIds.flatMap(storyId -> hackerNewsDAO.getStory(storyId))
 					.filter(item -> item.getType().equals(Type.STORY))
+					.filter(story -> calculateElapsedMinutes(story.getTime()) <= Constants.CACHE_TIME)
 					.sort((story, nextSory) -> nextSory.getScore().compareTo(story.getScore()));
 
 			List<Item> topStories = storyList.toStream().limit(10).collect(Collectors.toList());
