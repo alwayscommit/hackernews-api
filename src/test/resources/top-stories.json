@@ -1,86 +1,92 @@
 [
     {
-        "id": 23425739,
-        "by": "peter_retief",
-        "descendants": 1,
-        "kids": [
-            23425748
-        ],
-        "score": 1,
-        "time": 1591339575,
-        "title": "Police Save Black Lives",
+        "id": 23439647,
+        "submittedBy": "jcarpio",
+        "score": 852,
+        "submissionTime": "2020-06-06T20:32:09",
+        "title": "New slats make the Golden Gate Bridge sound like a David Lynch movie",
         "type": "story",
-        "text": "I have been a bit concerned about the latest idea of defunding the police in the US. \nStraight out its a very bad idea I will explain:\nI have compared figures from South Africa (SA) and the United States(US) firstly because I live in SA and both have a history of racial conflict.\nIn SA there has been a defunding of the police as well as affirmative action.<p>https:&#x2F;&#x2F;worldpopulationreview.com&#x2F;countries&#x2F;murder-rate-by-country&#x2F;\nmurders per 100,000 people. \nUS 5.35\nSA 33.97<p>Police killings per 10 million people\nhttps:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;List_of_killings_by_law_enforcement_officers_by_country\nUS 46.6\nSA 76.9<p>The figures speak for themselves but the message is look after your police, pay them well and train them and you will save lives."
+        "url": "https://www.kqed.org/arts/13881451/the-golden-gate-bridge-sounds-like-a-david-lynch-movie-now"
     },
     {
-        "id": 23425780,
-        "by": "sanjanamane",
-        "descendants": 0,
-        "score": 2,
-        "time": 1591340004,
-        "title": "When is the next batch of YC?",
-        "type": "story"
-    },
-    {
-        "id": 23425734,
-        "by": "arm",
-        "descendants": 1,
-        "kids": [
-            23425735
-        ],
-        "score": 1,
-        "time": 1591339526,
-        "title": "Rust things I miss in C (2018)",
+        "id": 23441767,
+        "submittedBy": "whack",
+        "score": 230,
+        "submissionTime": "2020-06-07T01:20:46",
+        "title": "Let's make a Teeny Tiny compiler",
         "type": "story",
-        "url": "https://people.gnome.org/~federico/blog/rust-things-i-miss-in-c.html"
+        "url": "http://web.eecs.utk.edu/~azh/blog/teenytinycompiler1.html"
     },
     {
-        "id": 23425768,
-        "by": "LegalTechFan100",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591339910,
-        "title": "How Important Is Digital Transformation to Legal?",
+        "id": 23442041,
+        "submittedBy": "pseudolus",
+        "score": 211,
+        "submissionTime": "2020-06-07T02:07:44",
+        "title": "Mad magazine legend Al Jaffee retires at age 99",
         "type": "story",
-        "url": "https://www.artificiallawyer.com/2020/06/05/how-important-is-digital-transformation-to-legal/"
+        "url": "https://www.washingtonpost.com/arts-entertainment/2020/06/06/al-jaffee-mad-magazine-retires/"
     },
     {
-        "id": 23425758,
-        "by": "arun4033622",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591339793,
-        "title": "Ask HN: What is your proudest open source contribution?",
-        "type": "story"
-    },
-    {
-        "id": 23425756,
-        "by": "dlcmh",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591339790,
-        "title": "Gene Sharp (CIA), color revolutions, and Tiananmen June 4th, 1989",
+        "id": 23444594,
+        "submittedBy": "dpcx",
+        "score": 184,
+        "submissionTime": "2020-06-07T09:14:45",
+        "title": "Choose Boring Technology (2015)",
         "type": "story",
-        "url": "https://www.facebook.com/QiaoCollective/posts/167694024779816"
+        "url": "https://mcfunley.com/choose-boring-technology"
     },
     {
-        "id": 23425730,
-        "by": "debugpoint",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591339458,
-        "title": "Move Virtual Machine Image to Another Host Using Gnome Boxes",
+        "id": 23444864,
+        "submittedBy": "niksmac",
+        "score": 162,
+        "submissionTime": "2020-06-07T10:25:24",
+        "title": "Google Chromium, sans integration with Google",
         "type": "story",
-        "url": "https://www.debugpoint.com/2020/06/move-virtual-machine-image-another-host/"
+        "url": "https://github.com/Eloston/ungoogled-chromium"
     },
     {
-        "id": 23425778,
-        "by": "johnx123-up",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591339995,
-        "title": "Tell HN: Stripe's Top Menu Animation",
+        "id": 23442730,
+        "submittedBy": "eatonphil",
+        "score": 114,
+        "submissionTime": "2020-06-07T03:45:14",
+        "title": "A guide to writing a DNS Server from scratch in Rust",
         "type": "story",
-        "text": "Stripe top menu has a cool animation. Are there any similar libraries available?"
+        "url": "https://github.com/EmilHernvall/dnsguide"
+    },
+    {
+        "id": 23445546,
+        "submittedBy": "Megabeets",
+        "score": 86,
+        "submissionTime": "2020-06-07T13:14:11",
+        "title": "C implementation of Tic-Tac-Toe in a single call to printf",
+        "type": "story",
+        "url": "https://github.com/carlini/printf-tac-toe"
+    },
+    {
+        "id": 23445245,
+        "submittedBy": "arpitbatra123",
+        "score": 75,
+        "submissionTime": "2020-06-07T11:59:51",
+        "title": "Helvetica, a documentary on typography, graphic design and global visual culture",
+        "type": "story",
+        "url": "https://www.hustwit.com/helvetica"
+    },
+    {
+        "id": 23415602,
+        "submittedBy": "mrjn",
+        "score": 68,
+        "submissionTime": "2020-06-04T17:46:13",
+        "title": "Solving Jepsen with OpenCensus Distributed Tracing",
+        "type": "story",
+        "url": "https://dgraph.io/blog/post/solving-jepsen-with-opencensus/"
+    },
+    {
+        "id": 23426753,
+        "submittedBy": "jinqueeny",
+        "score": 38,
+        "submissionTime": "2020-06-05T15:25:24",
+        "title": "SQLancer, a tool to automatically test DBMSs to find logic bugs",
+        "type": "story",
+        "url": "https://github.com/sqlancer/sqlancer"
     }
 ]

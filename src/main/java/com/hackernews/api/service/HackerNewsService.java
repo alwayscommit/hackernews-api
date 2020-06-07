@@ -1,17 +1,20 @@
 package com.hackernews.api.service;
 
-import com.hackernews.api.model.Item;
+import com.hackernews.api.model.ui.Comment;
+import com.hackernews.api.model.ui.Story;
 
 import reactor.core.publisher.Flux;
 
 public interface HackerNewsService {
 
-	public Flux<Item> getLatestStories();
+	public Flux<Story> getLatestStories();
 
-	public Flux<Item> getTopStories();
+	public Flux<Story> getTopStories();
 
-	Flux<Item> getPastStories();
+	Flux<Story> getPastStories();
 
-	public Flux<Item> getPastStories(Integer page, Integer size);
+	public Flux<Story> getPastStories(Integer page, Integer size);
+
+	public Flux<Comment> getTopComments(Integer storyId);
 
 }

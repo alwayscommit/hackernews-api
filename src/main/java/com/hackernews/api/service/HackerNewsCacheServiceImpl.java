@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.hackernews.api.Constants;
 import com.hackernews.api.model.Item;
+import com.hackernews.api.model.ui.Story;
 
 @Service
 public class HackerNewsCacheServiceImpl implements HackerNewsCacheService {
@@ -21,17 +22,17 @@ public class HackerNewsCacheServiceImpl implements HackerNewsCacheService {
 		cacheManager.getCache(Constants.CACHE_HACKER_NEWS).clear();
 	}
 
-	public void cache(String key, List<Item> itemList) {
-		cacheManager.getCache(Constants.CACHE_HACKER_NEWS).put(key, itemList);
+	public void cache(String key, List<Story> storyList) {
+		cacheManager.getCache(Constants.CACHE_HACKER_NEWS).put(key, storyList);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Item> getCachedList(String key) {
+	public List<Story> getCachedList(String key) {
 		return cacheManager.getCache(Constants.CACHE_HACKER_NEWS).get(key, List.class);
 	}
 
 	public boolean isCached(String key) {
-		List<Item> itemList = getCachedList(key);
+		List<Story> itemList = getCachedList(key);
 		return itemList != null && !itemList.isEmpty();
 	}
 

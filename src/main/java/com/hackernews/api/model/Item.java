@@ -12,7 +12,7 @@ public class Item {
 	private Integer id;
 	private String by;
 	private Integer descendants;
-	private List<Long> kids;
+	private List<Integer> kids;
 	private Long parent;
 	private Integer score;
 	private Long time;
@@ -63,11 +63,11 @@ public class Item {
 		this.descendants = descendants;
 	}
 
-	public List<Long> getKids() {
+	public List<Integer> getKids() {
 		return kids;
 	}
 
-	public void setKids(List<Long> kids) {
+	public void setKids(List<Integer> kids) {
 		this.kids = kids;
 	}
 

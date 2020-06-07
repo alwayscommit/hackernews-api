@@ -1,0 +1,86 @@
+[
+    {
+        "id": 23425739,
+        "by": "peter_retief",
+        "descendants": 1,
+        "kids": [
+            23425748
+        ],
+        "score": 1,
+        "time": 1591339575,
+        "title": "Police Save Black Lives",
+        "type": "story",
+        "text": "I have been a bit concerned about the latest idea of defunding the police in the US. \nStraight out its a very bad idea I will explain:\nI have compared figures from South Africa (SA) and the United States(US) firstly because I live in SA and both have a history of racial conflict.\nIn SA there has been a defunding of the police as well as affirmative action.<p>https:&#x2F;&#x2F;worldpopulationreview.com&#x2F;countries&#x2F;murder-rate-by-country&#x2F;\nmurders per 100,000 people. \nUS 5.35\nSA 33.97<p>Police killings per 10 million people\nhttps:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;List_of_killings_by_law_enforcement_officers_by_country\nUS 46.6\nSA 76.9<p>The figures speak for themselves but the message is look after your police, pay them well and train them and you will save lives."
+    },
+    {
+        "id": 23425780,
+        "by": "sanjanamane",
+        "descendants": 0,
+        "score": 2,
+        "time": 1591340004,
+        "title": "When is the next batch of YC?",
+        "type": "story"
+    },
+    {
+        "id": 23425734,
+        "by": "arm",
+        "descendants": 1,
+        "kids": [
+            23425735
+        ],
+        "score": 1,
+        "time": 1591339526,
+        "title": "Rust things I miss in C (2018)",
+        "type": "story",
+        "url": "https://people.gnome.org/~federico/blog/rust-things-i-miss-in-c.html"
+    },
+    {
+        "id": 23425768,
+        "by": "LegalTechFan100",
+        "descendants": 0,
+        "score": 1,
+        "time": 1591339910,
+        "title": "How Important Is Digital Transformation to Legal?",
+        "type": "story",
+        "url": "https://www.artificiallawyer.com/2020/06/05/how-important-is-digital-transformation-to-legal/"
+    },
+    {
+        "id": 23425758,
+        "by": "arun4033622",
+        "descendants": 0,
+        "score": 1,
+        "time": 1591339793,
+        "title": "Ask HN: What is your proudest open source contribution?",
+        "type": "story"
+    },
+    {
+        "id": 23425756,
+        "by": "dlcmh",
+        "descendants": 0,
+        "score": 1,
+        "time": 1591339790,
+        "title": "Gene Sharp (CIA), color revolutions, and Tiananmen June 4th, 1989",
+        "type": "story",
+        "url": "https://www.facebook.com/QiaoCollective/posts/167694024779816"
+    },
+    {
+        "id": 23425730,
+        "by": "debugpoint",
+        "descendants": 0,
+        "score": 1,
+        "time": 1591339458,
+        "title": "Move Virtual Machine Image to Another Host Using Gnome Boxes",
+        "type": "story",
+        "url": "https://www.debugpoint.com/2020/06/move-virtual-machine-image-another-host/"
+    },
+    {
+        "id": 23425778,
+        "by": "johnx123-up",
+        "descendants": 0,
+        "score": 1,
+        "time": 1591339995,
+        "title": "Tell HN: Stripe's Top Menu Animation",
+        "type": "story",
+        "text": "Stripe top menu has a cool animation. Are there any similar libraries available?"
+    }
+]

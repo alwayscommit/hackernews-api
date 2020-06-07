@@ -6,16 +6,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.hackernews.api.model.Item;
+import com.hackernews.api.model.ui.Story;
 
 public class JsonResourceLoader {
 
 	private static final String TEST_RESOURCE_URL = "src/test/resources/";
 
-	public static Item getItem(String fileName) {
+	@SuppressWarnings("unchecked")
+	public static <T> T getItem(String fileName) {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			Item item = objectMapper.readValue(getFile(fileName), Item.class);
+			objectMapper.registerModule(new JavaTimeModule());
+			T item = (T) objectMapper.readValue(getFile(fileName), Item.class);
 			return item;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -26,8 +30,21 @@ public class JsonResourceLoader {
 	public static List<Item> getItemList(String fileName) {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			List<Item> topStoryList = Arrays.asList(objectMapper.readValue(getFile(fileName), Item[].class));
-			return topStoryList;
+			objectMapper.registerModule(new JavaTimeModule());
+			List<Item> topItemList = Arrays.asList(objectMapper.readValue(getFile(fileName),Item[].class));
+			return topItemList;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static List<Story> getStoryList(String fileName) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.registerModule(new JavaTimeModule());
+			List<Story> topItemList = Arrays.asList(objectMapper.readValue(getFile(fileName), Story[].class));
+			return topItemList;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

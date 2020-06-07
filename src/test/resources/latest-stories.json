@@ -1,65 +1,92 @@
 [
     {
-        "id": 23437942,
-        "by": "michaelbrooks",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591436354,
-        "title": "Automatically post new blog posts to your Facebook and Twitter pages from RSS",
+        "id": 23439647,
+        "submittedBy": "jcarpio",
+        "score": 852,
+        "submissionTime": "2020-06-06T20:32:09",
+        "title": "New slats make the Golden Gate Bridge sound like a David Lynch movie",
         "type": "story",
-        "url": "https://blog.michaelbrooks.dev/automatically-posting-new-blog-posts-to-your-facebook-and-twitter-pages-from-your-rss-feed/"
+        "url": "https://www.kqed.org/arts/13881451/the-golden-gate-bridge-sounds-like-a-david-lynch-movie-now"
     },
     {
-        "id": 23437971,
-        "by": "fanf2",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591436587,
-        "title": "How to organize your Rust tests",
+        "id": 23441767,
+        "submittedBy": "whack",
+        "score": 230,
+        "submissionTime": "2020-06-07T01:20:46",
+        "title": "Let's make a Teeny Tiny compiler",
         "type": "story",
-        "url": "https://blog.logrocket.com/how-to-organize-your-rust-tests/"
+        "url": "http://web.eecs.utk.edu/~azh/blog/teenytinycompiler1.html"
     },
     {
-        "id": 23437958,
-        "by": "hendrik1979",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591436444,
-        "title": "Cambodia Military Combat Equipment Assets",
+        "id": 23442041,
+        "submittedBy": "pseudolus",
+        "score": 211,
+        "submissionTime": "2020-06-07T02:07:44",
+        "title": "Mad magazine legend Al Jaffee retires at age 99",
         "type": "story",
-        "url": "https://youtu.be/pfbVUvFvXNo"
+        "url": "https://www.washingtonpost.com/arts-entertainment/2020/06/06/al-jaffee-mad-magazine-retires/"
     },
     {
-        "id": 23437954,
-        "by": "sonalid1705",
-        "descendants": 1,
-        "kids": [
-            23437955
-        ],
-        "score": 1,
-        "time": 1591436417,
-        "title": "Experience with Scaler Academy: Review for Freshers",
+        "id": 23444594,
+        "submittedBy": "dpcx",
+        "score": 184,
+        "submissionTime": "2020-06-07T09:14:45",
+        "title": "Choose Boring Technology (2015)",
         "type": "story",
-        "url": "https://dev.to/scaleracademy/experience-with-scaler-academy-review-for-freshers-273i"
+        "url": "https://mcfunley.com/choose-boring-technology"
     },
     {
-        "id": 23437926,
-        "by": "laurentdc",
-        "descendants": 0,
-        "score": 1,
-        "time": 1591436116,
-        "title": "Do you still have project managers?",
+        "id": 23444864,
+        "submittedBy": "niksmac",
+        "score": 162,
+        "submissionTime": "2020-06-07T10:25:24",
+        "title": "Google Chromium, sans integration with Google",
         "type": "story",
-        "url": "https://medium.com/dreimannzelt-adventures/do-you-still-have-project-managers-3df4bdcd2f18"
+        "url": "https://github.com/Eloston/ungoogled-chromium"
     },
     {
-        "id": 23437921,
-        "by": "jonbaer",
-        "descendants": 0,
-        "score": 2,
-        "time": 1591436092,
-        "title": "End-to-End Object Detection with Transformers",
+        "id": 23442730,
+        "submittedBy": "eatonphil",
+        "score": 114,
+        "submissionTime": "2020-06-07T03:45:14",
+        "title": "A guide to writing a DNS Server from scratch in Rust",
         "type": "story",
-        "url": "https://github.com/facebookresearch/detr"
+        "url": "https://github.com/EmilHernvall/dnsguide"
+    },
+    {
+        "id": 23445546,
+        "submittedBy": "Megabeets",
+        "score": 86,
+        "submissionTime": "2020-06-07T13:14:11",
+        "title": "C implementation of Tic-Tac-Toe in a single call to printf",
+        "type": "story",
+        "url": "https://github.com/carlini/printf-tac-toe"
+    },
+    {
+        "id": 23445245,
+        "submittedBy": "arpitbatra123",
+        "score": 75,
+        "submissionTime": "2020-06-07T11:59:51",
+        "title": "Helvetica, a documentary on typography, graphic design and global visual culture",
+        "type": "story",
+        "url": "https://www.hustwit.com/helvetica"
+    },
+    {
+        "id": 23415602,
+        "submittedBy": "mrjn",
+        "score": 68,
+        "submissionTime": "2020-06-04T17:46:13",
+        "title": "Solving Jepsen with OpenCensus Distributed Tracing",
+        "type": "story",
+        "url": "https://dgraph.io/blog/post/solving-jepsen-with-opencensus/"
+    },
+    {
+        "id": 23426753,
+        "submittedBy": "jinqueeny",
+        "score": 38,
+        "submissionTime": "2020-06-05T15:25:24",
+        "title": "SQLancer, a tool to automatically test DBMSs to find logic bugs",
+        "type": "story",
+        "url": "https://github.com/sqlancer/sqlancer"
     }
 ]
