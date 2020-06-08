@@ -9,11 +9,11 @@ import reactor.core.publisher.Mono;
 
 public interface HackerNewsDAO {
 
-	public Flux<Integer> getNewStories();
+	public Flux<Item> getNewStories();
 
 	public Mono<Item> getItem(Integer itemId);
 
-	public Flux<Integer> getTopStories();
+	public Flux<Item> getTopStories();
 
 	public Mono<User> getUser(String userHandle);
 

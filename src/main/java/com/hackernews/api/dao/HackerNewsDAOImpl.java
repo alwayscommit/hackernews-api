@@ -5,6 +5,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.hackernews.api.Constants;
 import com.hackernews.api.model.Item;
+import com.hackernews.api.model.Type;
 import com.hackernews.api.model.User;
 
 import reactor.core.publisher.Flux;
@@ -14,8 +15,9 @@ import reactor.core.publisher.Mono;
 public class HackerNewsDAOImpl implements HackerNewsDAO {
 
 	@Override
-	public Flux<Integer> getNewStories() {
-		return WebClient.create().get().uri(Constants.URL_NEW_STORIES).retrieve().bodyToFlux(Integer.class);
+	public Flux<Item> getNewStories() {
+		Flux<Integer> newStoryIds = WebClient.create().get().uri(Constants.URL_NEW_STORIES).retrieve().bodyToFlux(Integer.class);
+		return newStoryIds.flatMap(storyId -> getItem(storyId));
 	}
 
 	@Override
@@ -25,8 +27,10 @@ public class HackerNewsDAOImpl implements HackerNewsDAO {
 	}
 
 	@Override
-	public Flux<Integer> getTopStories() {
-		return WebClient.create().get().uri(Constants.URL_TOP_STORIES).retrieve().bodyToFlux(Integer.class);
+	public Flux<Item> getTopStories() {
+		Flux<Integer> topStoryIds = WebClient.create().get().uri(Constants.URL_TOP_STORIES).retrieve()
+				.bodyToFlux(Integer.class);
+		return topStoryIds.flatMap(storyId -> getItem(storyId)).filter(item -> item.getType().equals(Type.STORY));
 	}
 
 	@Override

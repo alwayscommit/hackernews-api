@@ -57,28 +57,19 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		} else {
 			LOGGER.info("Fetching Top Stories from Hacker-News API...");
 
-//			Flux<Integer> topStoryIds = hackerNewsDAO.getTopStories();
+			Flux<Item> storyItems = hackerNewsDAO.getTopStories();
 
-//			TODO REMOVE LATER
-			Flux<Integer> topStoryIds = Flux.fromStream(hackerNewsDAO.getTopStories().toStream().limit(20));
+			Flux<Item> top10StoryItems = storyItems.sort(compareItemScore()).take(10);
 
-			Flux<Item> sortedStoryItems = topStoryIds.flatMap(storyId -> hackerNewsDAO.getItem(storyId))
-					.filter(item -> item.getType().equals(Type.STORY)).sort(compareItemScore());
+			Flux<Item> savedStoryItems = saveStoriesInDB(top10StoryItems);
 
-			List<Item> top10StoriesList = sortedStoryItems.toStream().limit(10).collect(Collectors.toList());
+			List<Story> top10Stories = savedStoryItems.map(item -> toStory(item)).toStream()
+					.collect(Collectors.toList());
 
-			saveStoriesInDB(top10StoriesList);
+			hackerNewsCacheService.cache(Constants.KEY_TOP_STORY, top10Stories);
 
-			Flux<Story> top10Stories = Flux.fromIterable(top10StoriesList).map(item -> toStory(item));
-
-			hackerNewsCacheService.cache(Constants.KEY_TOP_STORY, top10Stories.toStream().collect(Collectors.toList()));
-
-			return top10Stories;
+			return Flux.fromIterable(top10Stories);
 		}
-	}
-
-	private Comparator<Item> compareItemScore() {
-		return Comparator.comparingInt(Item::getScore).reversed();
 	}
 
 	@Override
@@ -133,27 +124,24 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		} else {
 			LOGGER.info("Fetching Latest Stories from Hacker-News API...");
 
-//			Flux<Integer> newStoryIds = hackerNewsDAO.getNewStories();
-
-//			TODO REMOVE LATER
-			Flux<Integer> newStoryIds = Flux.fromStream(hackerNewsDAO.getNewStories().toStream().limit(20));
-
-			Flux<Item> itemList = newStoryIds.flatMap(storyId -> hackerNewsDAO.getItem(storyId));
+			Flux<Item> itemList = hackerNewsDAO.getNewStories();
 
 			Flux<Item> storiesWithin10Mins = itemList
 					.filter(story -> calculateElapsedMinutes(story.getTime()) <= Constants.CACHE_TIME);
 
-			List<Item> latestStories = storiesWithin10Mins.toStream().collect(Collectors.toList());
+			Flux<Item> savedStoryItems = saveStoriesInDB(storiesWithin10Mins);
 
-			saveStoriesInDB(latestStories);
+			List<Story> storyList = savedStoryItems.map(item -> toStory(item)).toStream().collect(Collectors.toList());
 
-			Flux<Story> storyList = Flux.fromIterable(latestStories).map(item -> toStory(item));
+			hackerNewsCacheService.cache(Constants.KEY_LATEST_STORY, storyList);
 
-			hackerNewsCacheService.cache(Constants.KEY_LATEST_STORY, storyList.toStream().collect(Collectors.toList()));
-
-			return storyList;
+			return Flux.fromIterable(storyList);
 
 		}
+	}
+
+	private Comparator<Item> compareItemScore() {
+		return Comparator.comparingInt(Item::getScore).reversed();
 	}
 
 	private Story toStory(Item item) {
@@ -161,8 +149,8 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 				item.getType(), item.getUrl());
 	}
 
-	private void saveStoriesInDB(List<Item> latestStories) {
-		itemRepository.saveAll(latestStories).subscribe();
+	private Flux<Item> saveStoriesInDB(Flux<Item> top10StoryItems) {
+		return itemRepository.saveAll(top10StoryItems);
 	}
 
 	private Mono<Comment> getCommentUserDetails(Item child) {
