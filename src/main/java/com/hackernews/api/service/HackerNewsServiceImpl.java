@@ -69,7 +69,7 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 
 			saveStoriesInDB(top10StoriesList);
 
-			Flux<Story> top10Stories = Flux.fromIterable(top10StoriesList).flatMap(item -> mapToStory(item));
+			Flux<Story> top10Stories = Flux.fromIterable(top10StoriesList).map(item -> toStory(item));
 
 			hackerNewsCacheService.cache(Constants.KEY_TOP_STORY, top10Stories.toStream().collect(Collectors.toList()));
 
@@ -114,14 +114,14 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 	@Override
 	public Flux<Story> getPastStories() {
 		LOGGER.info("Fetching past stories...");
-		return itemRepository.findAll(Sort.by(SORT_FIELD).descending()).flatMap(item -> mapToStory(item));
+		return itemRepository.findAll(Sort.by(SORT_FIELD).descending()).map(item -> toStory(item));
 	}
 
 	@Override
 	public Flux<Story> getPastStories(Integer page, Integer size) {
 		LOGGER.info(String.format("Fetching past stories with page %s and size %s", page, size));
 		return itemRepository.findAll(Sort.by(SORT_FIELD).descending()).skip(page * size).take(size)
-				.flatMap(item -> mapToStory(item));
+				.map(item -> toStory(item));
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 
 			saveStoriesInDB(latestStories);
 
-			Flux<Story> storyList = Flux.fromIterable(latestStories).flatMap(item -> mapToStory(item));
+			Flux<Story> storyList = Flux.fromIterable(latestStories).map(item -> toStory(item));
 
 			hackerNewsCacheService.cache(Constants.KEY_LATEST_STORY, storyList.toStream().collect(Collectors.toList()));
 
@@ -156,9 +156,9 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		}
 	}
 
-	private Mono<Story> mapToStory(Item item) {
-		return Mono.just(new Story(item.getId(), item.getBy(), item.getScore(), getCreationTime(item.getTime()),
-				item.getTitle(), item.getType(), item.getUrl()));
+	private Story toStory(Item item) {
+		return new Story(item.getId(), item.getBy(), item.getScore(), getCreationTime(item.getTime()), item.getTitle(),
+				item.getType(), item.getUrl());
 	}
 
 	private void saveStoriesInDB(List<Item> latestStories) {
