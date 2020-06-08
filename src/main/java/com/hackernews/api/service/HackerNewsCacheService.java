@@ -2,7 +2,6 @@ package com.hackernews.api.service;
 
 import java.util.List;
 
-import com.hackernews.api.model.Item;
 import com.hackernews.api.model.ui.Story;
 
 public interface HackerNewsCacheService {

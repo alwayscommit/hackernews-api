@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.hackernews.api.Constants;
-import com.hackernews.api.model.Item;
 import com.hackernews.api.model.ui.Story;
 
 @Service

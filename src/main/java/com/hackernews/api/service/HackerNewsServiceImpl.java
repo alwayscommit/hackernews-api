@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,46 +48,7 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		this.hackerNewsCacheService = hackerNewsCacheService;
 	}
 
-	public Flux<Story> getLatestStories() {
-
-		if (hackerNewsCacheService.isCached(Constants.KEY_LATEST_STORY)) {
-			LOGGER.info("Fetching Latest Stories from Local Cache...");
-			return Flux.fromIterable(hackerNewsCacheService.getCachedList(Constants.KEY_LATEST_STORY));
-		} else {
-			LOGGER.info("Fetching Latest Stories from Hacker-News API...");
-
-//			Flux<Integer> newStoryIds = hackerNewsDAO.getNewStories();
-
-//			TODO REMOVE LATER
-			Flux<Integer> newStoryIds = Flux.fromStream(hackerNewsDAO.getNewStories().toStream().limit(20));
-
-			Flux<Item> itemList = newStoryIds.flatMap(storyId -> hackerNewsDAO.getItem(storyId));
-
-			Flux<Item> storiesWithin10Mins = itemList
-					.filter(story -> calculateElapsedMinutes(story.getTime()) <= Constants.CACHE_TIME);
-
-			List<Item> latestStories = storiesWithin10Mins.toStream().collect(Collectors.toList());
-
-			saveStoriesInDB(latestStories);
-
-			Flux<Story> storyList = Flux.fromIterable(latestStories).flatMap(item -> getStory(item));
-
-			hackerNewsCacheService.cache(Constants.KEY_LATEST_STORY, storyList.toStream().collect(Collectors.toList()));
-
-			return storyList;
-
-		}
-	}
-
-	private Mono<Story> getStory(Item item) {
-		return Mono.just(new Story(item.getId(), item.getBy(), item.getScore(), getCreationTime(item.getTime()),
-				item.getTitle(), item.getType(), item.getUrl()));
-	}
-
-	private LocalDateTime getCreationTime(Long epochTime) {
-		return Instant.ofEpochSecond(epochTime).atZone(ZoneId.systemDefault()).toLocalDateTime();
-	}
-
+	@Override
 	public Flux<Story> getTopStories() {
 
 		if (hackerNewsCacheService.isCached(Constants.KEY_TOP_STORY)) {
@@ -100,18 +62,14 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 //			TODO REMOVE LATER
 			Flux<Integer> topStoryIds = Flux.fromStream(hackerNewsDAO.getTopStories().toStream().limit(20));
 
-			Flux<Item> itemList = topStoryIds.flatMap(storyId -> hackerNewsDAO.getItem(storyId));
+			Flux<Item> sortedStoryItems = topStoryIds.flatMap(storyId -> hackerNewsDAO.getItem(storyId))
+					.filter(item -> item.getType().equals(Type.STORY)).sort(compareItemScore());
 
-			Flux<Item> storyList = itemList.filter(item -> item.getType().equals(Type.STORY));
-
-			Flux<Item> topScoredStoryList = storyList
-					.sort((story, nextSory) -> nextSory.getScore().compareTo(story.getScore()));
-
-			List<Item> top10StoriesList = topScoredStoryList.toStream().limit(10).collect(Collectors.toList());
+			List<Item> top10StoriesList = sortedStoryItems.toStream().limit(10).collect(Collectors.toList());
 
 			saveStoriesInDB(top10StoriesList);
 
-			Flux<Story> top10Stories = Flux.fromIterable(top10StoriesList).flatMap(item -> getStory(item));
+			Flux<Story> top10Stories = Flux.fromIterable(top10StoriesList).flatMap(item -> mapToStory(item));
 
 			hackerNewsCacheService.cache(Constants.KEY_TOP_STORY, top10Stories.toStream().collect(Collectors.toList()));
 
@@ -119,17 +77,8 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		}
 	}
 
-	@Override
-	public Flux<Story> getPastStories() {
-		LOGGER.info("Fetching past stories...");
-		return itemRepository.findAll(Sort.by(SORT_FIELD).descending()).flatMap(item -> getStory(item));
-	}
-
-	@Override
-	public Flux<Story> getPastStories(Integer page, Integer size) {
-		LOGGER.info(String.format("Fetching past stories with page %s and size %s", page, size));
-		return itemRepository.findAll(Sort.by(SORT_FIELD).descending()).skip(page * size).take(size)
-				.flatMap(item -> getStory(item));
+	private Comparator<Item> compareItemScore() {
+		return Comparator.comparingInt(Item::getScore).reversed();
 	}
 
 	@Override
@@ -162,6 +111,56 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		return Flux.just(parentComment);
 	}
 
+	@Override
+	public Flux<Story> getPastStories() {
+		LOGGER.info("Fetching past stories...");
+		return itemRepository.findAll(Sort.by(SORT_FIELD).descending()).flatMap(item -> mapToStory(item));
+	}
+
+	@Override
+	public Flux<Story> getPastStories(Integer page, Integer size) {
+		LOGGER.info(String.format("Fetching past stories with page %s and size %s", page, size));
+		return itemRepository.findAll(Sort.by(SORT_FIELD).descending()).skip(page * size).take(size)
+				.flatMap(item -> mapToStory(item));
+	}
+
+	@Override
+	public Flux<Story> getLatestStories() {
+
+		if (hackerNewsCacheService.isCached(Constants.KEY_LATEST_STORY)) {
+			LOGGER.info("Fetching Latest Stories from Local Cache...");
+			return Flux.fromIterable(hackerNewsCacheService.getCachedList(Constants.KEY_LATEST_STORY));
+		} else {
+			LOGGER.info("Fetching Latest Stories from Hacker-News API...");
+
+//			Flux<Integer> newStoryIds = hackerNewsDAO.getNewStories();
+
+//			TODO REMOVE LATER
+			Flux<Integer> newStoryIds = Flux.fromStream(hackerNewsDAO.getNewStories().toStream().limit(20));
+
+			Flux<Item> itemList = newStoryIds.flatMap(storyId -> hackerNewsDAO.getItem(storyId));
+
+			Flux<Item> storiesWithin10Mins = itemList
+					.filter(story -> calculateElapsedMinutes(story.getTime()) <= Constants.CACHE_TIME);
+
+			List<Item> latestStories = storiesWithin10Mins.toStream().collect(Collectors.toList());
+
+			saveStoriesInDB(latestStories);
+
+			Flux<Story> storyList = Flux.fromIterable(latestStories).flatMap(item -> mapToStory(item));
+
+			hackerNewsCacheService.cache(Constants.KEY_LATEST_STORY, storyList.toStream().collect(Collectors.toList()));
+
+			return storyList;
+
+		}
+	}
+
+	private Mono<Story> mapToStory(Item item) {
+		return Mono.just(new Story(item.getId(), item.getBy(), item.getScore(), getCreationTime(item.getTime()),
+				item.getTitle(), item.getType(), item.getUrl()));
+	}
+
 	private void saveStoriesInDB(List<Item> latestStories) {
 		itemRepository.saveAll(latestStories).subscribe();
 	}
@@ -190,5 +189,9 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 
 	private long nowEpochSeconds() {
 		return (Instant.now().getEpochSecond());
+	}
+
+	private LocalDateTime getCreationTime(Long epochTime) {
+		return Instant.ofEpochSecond(epochTime).atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
 }

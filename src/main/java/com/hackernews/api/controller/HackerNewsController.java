@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hackernews.api.model.Item;
 import com.hackernews.api.model.ui.Comment;
 import com.hackernews.api.model.ui.Story;
 import com.hackernews.api.service.HackerNewsService;
@@ -26,12 +25,6 @@ public class HackerNewsController {
 	@Autowired
 	public HackerNewsController(HackerNewsService hackerNewsService) {
 		this.hackerNewsService = hackerNewsService;
-	}
-
-	@GetMapping(path = "/latest-stories")
-	public Flux<Story> getLatestStories() {
-		LOGGER.info("Fetching latest stories...");
-		return hackerNewsService.getLatestStories();
 	}
 
 	@GetMapping(path = "/top-stories")
@@ -57,6 +50,12 @@ public class HackerNewsController {
 			@RequestParam(name = "size", defaultValue = "10") Integer size) {
 		LOGGER.info("Fetching past stories with pagination...");
 		return hackerNewsService.getPastStories(page, size);
+	}
+	
+	@GetMapping(path = "/latest-stories")
+	public Flux<Story> getLatestStories() {
+		LOGGER.info("Fetching latest stories...");
+		return hackerNewsService.getLatestStories();
 	}
 
 }

@@ -12,7 +12,7 @@ import com.hackernews.api.Constants;
 
 @Configuration
 public class HackerNewsCacheManager {
-	
+
 	@Bean
 	public CacheManager cacheManager() {
 		SimpleCacheManager cacheManager = new SimpleCacheManager();
