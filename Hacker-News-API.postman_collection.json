@@ -1,0 +1,119 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Hacker-News-API",
+		"_postman_id": "57d7b878-8af3-4465-9db4-f3d0badd2b88",
+		"description": "Hacker News APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Top Stories",
+			"request": {
+				"url": "localhost:8080/hacker-news/top-stories",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "On the first request, this API gets the Top Stories from Hacker News APIs. Following requests will be fetched from a local cache up to 10 minutes."
+			},
+			"response": []
+		},
+		{
+			"name": "Top Comments",
+			"request": {
+				"url": {
+					"raw": "localhost:8080/hacker-news/top-comments?storyId=23436775",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hacker-news",
+						"top-comments"
+					],
+					"query": [
+						{
+							"key": "storyId",
+							"value": "23436775",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Fetches the top 10 parent comments on a given story ranked on the number of nested children comments within each story."
+			},
+			"response": []
+		},
+		{
+			"name": "Past Stories",
+			"request": {
+				"url": "localhost:8080/hacker-news/past-stories",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Fetches a list of all past stories requested by the user."
+			},
+			"response": []
+		},
+		{
+			"name": "Past Stories Paged",
+			"request": {
+				"url": {
+					"raw": "localhost:8080/hacker-news/past-stories?offset=0&limit=10",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hacker-news",
+						"past-stories"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "limit",
+							"value": "10",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Fetches a list of all past stories requested by the user using pagination."
+			},
+			"response": []
+		},
+		{
+			"name": "Latest Stories",
+			"request": {
+				"url": "localhost:8080/hacker-news/latest-stories",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"post message\"\n}"
+				},
+				"description": "Fetches the latest stories posted in the last 10 minutes and caches them up to 10 minutes."
+			},
+			"response": []
+		}
+	]
+}
