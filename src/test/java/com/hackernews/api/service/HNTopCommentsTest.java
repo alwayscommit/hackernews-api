@@ -63,6 +63,7 @@ class HNTopCommentsTest {
 	@Test
 	void getTopCommentsTest() {
 		List<Item> commentItemList = JsonResourceLoader.getItemList("top-item-comments.json");
+		int totalInvocations = commentItemList.size();
 		int parentId = commentItemList.get(0).getId();
 		List<User> userList = JsonResourceLoader.getUserList("users.json");
 		
@@ -77,7 +78,7 @@ class HNTopCommentsTest {
 		long expectedSizeMinusParent = expectedSize - 1;//minus parent
 		long actualSize = commentList.count().block().longValue();
 		
-		verify(hackerNewsDAO, times(5)).getItem(Mockito.anyInt());
+		verify(hackerNewsDAO, times(totalInvocations)).getItem(Mockito.anyInt());
 		assertEquals(expectedSizeMinusParent, actualSize);
 	}
 
