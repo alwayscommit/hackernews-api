@@ -1,11 +1,11 @@
 version: "3"
 services:
-  api-database:
+  hacker_news_db:
     image: mongo:4.0
     container_name: "hacker_news_db"
     ports:
       - 27017:27017
-  api:
+  hacker_news_api:
     image: hacker-news-api
     ports:
       - 8080:8080
