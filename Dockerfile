@@ -1,9 +1,10 @@
-FROM maven:3.6.3-openjdk-8 AS build  
-COPY src /hacker-news/src  
-COPY pom.xml /hacker-news 
-RUN mvn -f /hacker-news/pom.xml clean package
+FROM openjdk-8 
+RUN apk update && apk add bash
 
-FROM openjdk:8
-COPY --from=build /hacker-news/target/hackernews-api-service-0.0.1-SNAPSHOT.jar /hacker-news/hackernews-api-service-0.0.1-SNAPSHOT.jar  
-EXPOSE 8080  
-ENTRYPOINT ["java","-jar","/hacker-news/hackernews-api-service-0.0.1-SNAPSHOT.jar"]  
+RUN mkdir -p /hacker-news
+
+COPY target/hackernews-api-service-0.0.1-SNAPSHOT.jar /hacker-news/hackernews-api-service-0.0.1-SNAPSHOT.jar  
+
+WORKDIR /hacker-news
+
+ENTRYPOINT ["java","-Dspring.data.mongodb.uri=mongodb://hacker_news_db:27017/hacker_news_db","-jar","/hacker-news/hackernews-api-service-0.0.1-SNAPSHOT.jar"]  
