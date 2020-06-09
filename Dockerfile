@@ -1,4 +1,4 @@
-FROM openjdk-8 
+FROM openjdk:8-alpine
 RUN apk update && apk add bash
 
 RUN mkdir -p /hacker-news
