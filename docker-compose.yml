@@ -7,7 +7,7 @@ services:
       - 27017:27017
     restart: always
   hacker_news_api:
-    build: .
+    image: hacker_news_api
     restart: always
     ports:
       - 8080:8080
