@@ -1,10 +1,12 @@
 package com.hackernews.api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +23,8 @@ import com.hackernews.api.model.ui.Story;
 import com.hackernews.api.repository.ItemRepository;
 
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
+@SuppressWarnings("unchecked")
 @SpringBootTest
 @RunWith(JUnitPlatform.class)
 class HNTopStoriesTest {
@@ -44,76 +46,89 @@ class HNTopStoriesTest {
 	}
 
 	@Test
-	void testMockDAO() {
-		Mockito.when(hackerNewsDAO.getTopStories()).thenReturn(Flux.empty());
-		Mockito.when(hackerNewsDAO.getItem(Mockito.anyInt())).thenReturn(Mono.empty());
-		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.empty());
-		Mockito.when(hackerNewsCacheService.isCached(Mockito.anyString())).thenReturn(false);
+	void testMock() {
+		when(hackerNewsCacheService.isCached(anyString())).thenReturn(false);
+		when(hackerNewsDAO.getTopStories()).thenReturn(Flux.empty());
+		when(itemRepository.saveAll(Mockito.any(Flux.class))).thenReturn(Flux.empty());
+
 		Flux<Story> itemList = hackerNewsServiceImpl.getTopStories();
+
+		verify(hackerNewsCacheService, times(1)).isCached(anyString());
+		verify(hackerNewsDAO, times(1)).getTopStories();
+		verify(itemRepository, times(1)).saveAll(Mockito.any(Flux.class));
+
 		long actualSize = itemList.count().block();
 		assertEquals(0, actualSize);
 	}
 
 	@Test
-	void testSingleItemLessThan10Mins() {
+	void testSingleTopItem() {
 		Item item = JsonResourceLoader.getItem("item.json");
-		// less than 10 mins
-		item.setTime(Instant.now().minusMillis(300000).getEpochSecond());
-		Mockito.when(hackerNewsDAO.getTopStories()).thenReturn(Flux.just(23425780));
-		Mockito.when(hackerNewsDAO.getItem(Mockito.anyInt())).thenReturn(Mono.just(item));
+
+		Mockito.when(hackerNewsDAO.getTopStories()).thenReturn(Flux.just(item));
 		Mockito.when(hackerNewsCacheService.isCached(Mockito.anyString())).thenReturn(false);
-		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.just(item));
+		Mockito.when(itemRepository.saveAll(Mockito.any(Flux.class))).thenReturn(Flux.just(item));
+
 		Flux<Story> itemList = hackerNewsServiceImpl.getTopStories();
 		String actualUser = itemList.blockFirst().getSubmittedBy();
 		assertEquals("peter_retief", actualUser);
 	}
 
 	@Test
-	void testItemsLessThan10Mins() {
-		List<Item> itemList = JsonResourceLoader.getItemList("top-items.json");
-		List<Integer> intList = itemList.stream().map(e -> e.getId()).collect(Collectors.toList());
-		Mockito.when(hackerNewsDAO.getTopStories()).thenReturn(Flux.fromIterable(intList));
-		
-		for (int i = 0; i < itemList.size(); i++) {
-			itemList.get(i).setTime(Instant.now().minusSeconds(600).getEpochSecond());
-		}
-		
-		for (int i = 0; i < itemList.size(); i++) {
-			Mockito.when(hackerNewsDAO.getItem(itemList.get(i).getId())).thenReturn(Mono.just(itemList.get(i)));
-		}
-		
-		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.fromIterable(itemList));
-		Flux<Story> topStories = hackerNewsServiceImpl.getTopStories();
-		assertEquals(itemList.size(), topStories.toStream().count());
+	void testTopStoryCachedMock() {
+
+		Mockito.when(hackerNewsCacheService.isCached(Mockito.anyString())).thenReturn(true);
+
+		hackerNewsServiceImpl.getTopStories();
+
+		verify(hackerNewsCacheService, times(1)).isCached(anyString());
+		verify(hackerNewsDAO, times(0)).getTopStories();
+		verify(itemRepository, times(0)).saveAll(Mockito.any(Flux.class));
 	}
 
 	@Test
-	void testMultipleItemSomeNullMins() {
-		List<Item> itemList = JsonResourceLoader.getItemList("top-items.json");
+	void testTopStoryCachedData() {
 
-		int totalSize = itemList.size();
-		int positiveTestSize = 3;
+		List<Story> topStoryList = JsonResourceLoader.getStoryList("top-stories.json");
 
-		List<Integer> intList = itemList.stream().map(e -> e.getId()).collect(Collectors.toList());
-		Mockito.when(hackerNewsDAO.getTopStories()).thenReturn(Flux.fromIterable(intList));
+		Mockito.when(hackerNewsCacheService.isCached(Mockito.anyString())).thenReturn(true);
+		Mockito.when(hackerNewsCacheService.getCachedList(Mockito.anyString())).thenReturn(topStoryList);
 
-		for (int i = 0; i < itemList.size(); i++) {
-			// Set to less than 10 minutes
-			itemList.get(i).setTime(Instant.now().minusSeconds(600).getEpochSecond());
-		}
+		Flux<Story> actualStoryList = hackerNewsServiceImpl.getTopStories();
 
-		// These have an item associated with itemId
-		for (int i = 0; i < positiveTestSize; i++) {
-			Mockito.when(hackerNewsDAO.getItem(itemList.get(i).getId())).thenReturn(Mono.just(itemList.get(i)));
-		}
+		verify(hackerNewsCacheService, times(1)).isCached(anyString());
+		verify(hackerNewsCacheService, times(1)).getCachedList(anyString());
+		
+		assertEquals(topStoryList.size(), actualStoryList.toStream().count());
+	}
+	
+	@Test
+	void testTopStoryNotCachedMock() {
 
-		// These do have an item associated with itemId
-		for (int i = positiveTestSize; i < totalSize; i++) {
-			Mockito.when(hackerNewsDAO.getItem(itemList.get(i).getId())).thenReturn(Mono.empty());
-		}
-		Mockito.when(itemRepository.saveAll(Mockito.anyList())).thenReturn(Flux.fromIterable(itemList));
-		Flux<Story> topStories = hackerNewsServiceImpl.getTopStories();
-		assertEquals(positiveTestSize, topStories.toStream().count());
+		Mockito.when(hackerNewsCacheService.isCached(Mockito.anyString())).thenReturn(false);
+		when(hackerNewsDAO.getTopStories()).thenReturn(Flux.empty());
+		when(itemRepository.saveAll(Mockito.any(Flux.class))).thenReturn(Flux.empty());
+
+		hackerNewsServiceImpl.getTopStories();
+
+		verify(hackerNewsCacheService, times(1)).isCached(anyString());
+		verify(hackerNewsCacheService, times(0)).getCachedList(anyString());
+		verify(hackerNewsDAO, times(1)).getTopStories();
+		verify(itemRepository, times(1)).saveAll(Mockito.any(Flux.class));
 	}
 
+
+	@Test
+	void testTopStoryNotCachedData() {
+		
+		List<Item> topItemList = JsonResourceLoader.getItemList("top-items.json");
+
+		Mockito.when(hackerNewsCacheService.isCached(Mockito.anyString())).thenReturn(false);
+		when(hackerNewsDAO.getTopStories()).thenReturn(Flux.fromIterable(topItemList));
+		when(itemRepository.saveAll(Mockito.any(Flux.class))).thenReturn(Flux.fromIterable(topItemList));
+
+		Flux<Story> actualStoryList = hackerNewsServiceImpl.getTopStories();
+		
+		assertEquals(topItemList.size(), actualStoryList.toStream().count());
+	}
 }

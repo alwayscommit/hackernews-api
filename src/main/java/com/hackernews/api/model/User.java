@@ -4,7 +4,7 @@ public class User {
 
 	private String id;
 	private Long created;
-
+	
 	public String getId() {
 		return id;
 	}

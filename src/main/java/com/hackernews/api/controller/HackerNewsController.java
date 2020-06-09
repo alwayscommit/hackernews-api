@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hackernews.api.model.Item;
 import com.hackernews.api.model.ui.Comment;
 import com.hackernews.api.model.ui.Story;
 import com.hackernews.api.service.HackerNewsService;

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.hackernews.api.Constants;
 import com.hackernews.api.dao.HackerNewsDAO;
 import com.hackernews.api.model.Item;
-import com.hackernews.api.model.Type;
 import com.hackernews.api.model.User;
 import com.hackernews.api.model.ui.Comment;
 import com.hackernews.api.model.ui.Story;
@@ -76,17 +75,17 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 	public Flux<Comment> getTopComments(Integer storyId) {
 		LOGGER.info(String.format("Fetching top comments for storyId %s", storyId));
 
-		Flux<Item> storyComments = getComment(storyId).flatMap(this::getInnerComments);
+		Flux<Item> storyComments = getItem(storyId).flatMap(this::getInnerComments);
 		Flux<Item> childComments = storyComments.filter(comment -> !comment.getId().equals(storyId));
 
-		Flux<Item> topComments = childComments.filter(comment -> comment.getKids() != null).sort((comment,
+		Flux<Item> top10Comments = childComments.filter(comment -> comment.getKids() != null).sort((comment,
 				nextComment) -> Integer.valueOf(nextComment.getKids().size()).compareTo(comment.getKids().size()))
 				.take(10);
 
-		return topComments.flatMap(child -> getCommentUserDetails(child));
+		return top10Comments.flatMap(itemComment -> toComment(itemComment));
 	}
 
-	private Flux<Item> getComment(Integer commentId) {
+	private Flux<Item> getItem(Integer commentId) {
 		return Flux.from(hackerNewsDAO.getItem(commentId));
 	}
 
@@ -95,7 +94,7 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		if (parentComment.getKids() != null) {
 
 			return Flux.merge(Flux.just(parentComment), Flux.fromIterable(parentComment.getKids())
-					.flatMap(childId -> getComment(childId)).flatMap(childComment -> getInnerComments(childComment)));
+					.flatMap(childId -> getItem(childId)).flatMap(childComment -> getInnerComments(childComment)));
 
 		}
 
@@ -124,9 +123,7 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		} else {
 			LOGGER.info("Fetching Latest Stories from Hacker-News API...");
 
-			Flux<Item> itemList = hackerNewsDAO.getNewStories();
-
-			Flux<Item> storiesWithin10Mins = itemList
+			Flux<Item> storiesWithin10Mins = hackerNewsDAO.getNewStories()
 					.filter(story -> calculateElapsedMinutes(story.getTime()) <= Constants.CACHE_TIME);
 
 			Flux<Item> savedStoryItems = saveStoriesInDB(storiesWithin10Mins);
@@ -153,7 +150,7 @@ public class HackerNewsServiceImpl implements HackerNewsService {
 		return itemRepository.saveAll(top10StoryItems);
 	}
 
-	private Mono<Comment> getCommentUserDetails(Item child) {
+	private Mono<Comment> toComment(Item child) {
 		return getUser(child.getBy()).map(userDetails -> {
 			return new Comment(child.getId(), userDetails.getId(), getAge(userDetails.getCreated()), child.getText());
 		});

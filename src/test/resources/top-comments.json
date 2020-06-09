@@ -1,0 +1,62 @@
+[
+    {
+        "id": 23437630,
+        "userHandle": "sva_",
+        "userAge": 0,
+        "text": "As far as I know these port scans are done using WebRTC. Using a browser extension[0] it is easy to deactivate it on the go. Personally, I always have WebRTC disabled by default (as it has several nasty security implications), and only activate it if I explicitly need it for something.<p>[0] <a href=\"https:&#x2F;&#x2F;addons.mozilla.org&#x2F;en-US&#x2F;firefox&#x2F;addon&#x2F;happy-bonobo-disable-webrtc&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;addons.mozilla.org&#x2F;en-US&#x2F;firefox&#x2F;addon&#x2F;happy-bonobo-...</a>"
+    },
+    {
+        "id": 23437752,
+        "userHandle": "moooo99",
+        "userAge": 0,
+        "text": "irrc, eBay uses websocket connections [0] to scan the ports. Firefox doesn&#x27;t offer an option to disable websockets in the <i>about:config</i> page. However, I have read about workarounds by setting<p><pre><code>  network.websocket.max-connections=0\n</code></pre>\nThis is a global setting and is applied to all websites. I also wasn&#x27;t able to test this myself yet. Are there any good extensions for blocking websockets on for specific domains?<p>[0] <a href=\"https:&#x2F;&#x2F;nullsweep.com&#x2F;why-is-this-website-port-scanning-me&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;nullsweep.com&#x2F;why-is-this-website-port-scanning-me&#x2F;</a>"
+    },
+    {
+        "id": 23437864,
+        "userHandle": "kevsim",
+        "userAge": 6,
+        "text": "It seems like eBay wants it both ways. They want to have a huge user base with low friction to get started, but they also don&#x27;t want fraudulent players. Instead of doing KYC (know your customer) like many financial services, they&#x27;re stuck doing dirty tricks like this to try and combat fraud."
+    },
+    {
+        "id": 23438079,
+        "userHandle": "gear54rus",
+        "userAge": 6,
+        "text": "What can you possibly know from such a scan?<p>Standard clearly states that pretty much nothing: <a href=\"https:&#x2F;&#x2F;www.w3.org&#x2F;TR&#x2F;websockets&#x2F;#concept-websocket-close-fail\" rel=\"nofollow\">https:&#x2F;&#x2F;www.w3.org&#x2F;TR&#x2F;websockets&#x2F;#concept-websocket-close-fa...</a><p>Sure they&#x27;re shady and that needs to be blocked, but security implications? Pretty much nil."
+    },
+    {
+        "id": 23442029,
+        "userHandle": "sq_",
+        "userAge": 3,
+        "text": "I feel like the only good option at this point when purchasing a prebuilt desktop or a laptop is to nuke the drive and do a clean install of Windows. Seems like the only way to ensure that you&#x27;ve killed the crapware and any partitions meant to preserve&#x2F;reinstall it."
+    },
+    {
+        "id": 23437639,
+        "userHandle": "grooling",
+        "userAge": 3,
+        "text": "I don&#x27;t understand this could you explain?"
+    },
+    {
+        "id": 23437673,
+        "userHandle": "Maxious",
+        "userAge": 11,
+        "text": "This might explain why some preinstalled HP laptop software (with open ports?) causes a BSOD when users visit ebay <a href=\"https:&#x2F;&#x2F;h30434.www3.hp.com&#x2F;t5&#x2F;Notebook-Operating-System-and-Recovery&#x2F;Blu-screen-error-after-login-to-ebay-costumer-page&#x2F;td-p&#x2F;6692602\" rel=\"nofollow\">https:&#x2F;&#x2F;h30434.www3.hp.com&#x2F;t5&#x2F;Notebook-Operating-System-and-...</a>"
+    },
+    {
+        "id": 23438210,
+        "userHandle": "dpenguin",
+        "userAge": 0,
+        "text": "eBay has a big fraud headache. They have a bunch of algorithms (from the pre-ML-hype days) that take a variety of inputs to determine whether a given transaction is fraudulent or not. Presence of remote login service on the user’s computer may tip the scale heavily in this calculation. Fraud detection is a necessary evil for all financial transaction companies in order to keep costs low for everyone else.<p>If you’re worried about privacy, use CCPA’s right to information and ask them for a dump of everything they have on you. They are supposed to give you info that other SPs like Threatmetrix have on you as well if they really are transmitting it to 3rd parties."
+    },
+    {
+        "id": 23437596,
+        "userHandle": "mobilio",
+        "userAge": 6,
+        "text": "It&#x27;s crystal clear why they do this.<p>Many companies or persons share their desktops for remote usage. Later they sell this service to eBay users. And they&#x27;re using it for different fraudulent activities - from making real  sales (just for stars) to bidding to own items (for rising price).<p>For years eBay fight this."
+    },
+    {
+        "id": 23437567,
+        "userHandle": "mehrdadn",
+        "userAge": 7,
+        "text": "I asked this earlier and nobody had a response, so thought I&#x27;d ask it again: is there an extension to block this?<p>Edit: @Windows users: pip install pydivert and then try to write a script to block connections from Chrome to non-Chrome processes. you might need GetTcpTable2() or something. (Looking into this now. Check out <a href=\"http:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;25431340\" rel=\"nofollow\">http:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;25431340</a>)"
+    }
+]

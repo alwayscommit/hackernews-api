@@ -1,0 +1,74 @@
+[
+	{
+		"by": "joering2",
+		"descendants": 142,
+		"id": 23436775,
+		"kids": [
+			23437673,
+			23437567
+		],
+		"score": 473,
+		"time": 1591416653,
+		"title": "eBay is port scanning visitors to their website",
+		"type": "story",
+		"url": "https://blog.nem.ec/2020/05/24/ebay-port-scanning/"
+	},
+	{
+		"id": 23437673,
+		"by": "mehrdadn",
+		"kids": [
+			23437630,
+			23440778
+		],
+		"parent": 23436775,
+		"time": 1591431068,
+		"type": "comment",
+		"text": "I asked this earlier and nobody had a response, so thought I&#x27;d ask it again: is there an extension to block this?<p>Edit: @Windows users: pip install pydivert and then try to write a script to block connections from Chrome to non-Chrome processes. you might need GetTcpTable2() or something. (Looking into this now. Check out <a href=\"http:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;25431340\" rel=\"nofollow\">http:&#x2F;&#x2F;stackoverflow.com&#x2F;a&#x2F;25431340</a>)"
+	},
+	{
+		"id": 23437567,
+		"by": "mobilio",
+		"kids": [
+			23442029
+		],
+		"parent": 23436775,
+		"time": 1591431576,
+		"type": "comment",
+		"text": "It&#x27;s crystal clear why they do this.<p>Many companies or persons share their desktops for remote usage. Later they sell this service to eBay users. And they&#x27;re using it for different fraudulent activities - from making real  sales (just for stars) to bidding to own items (for rising price).<p>For years eBay fight this."
+	},
+	{
+		"id": 23437630,
+		"by": "Maxious",
+		"kids": [
+			23438053
+		],
+		"parent": 23437673,
+		"time": 1591433178,
+		"type": "comment",
+		"text": "This might explain why some preinstalled HP laptop software (with open ports?) causes a BSOD when users visit ebay <a href=\"https:&#x2F;&#x2F;h30434.www3.hp.com&#x2F;t5&#x2F;Notebook-Operating-System-and-Recovery&#x2F;Blu-screen-error-after-login-to-ebay-costumer-page&#x2F;td-p&#x2F;6692602\" rel=\"nofollow\">https:&#x2F;&#x2F;h30434.www3.hp.com&#x2F;t5&#x2F;Notebook-Operating-System-and-...</a>"
+	},
+	{
+		"id": 23440778,
+		"by": "dpenguin",
+		"parent": 23437673,
+		"time": 1591440041,
+		"type": "comment",
+		"text": "eBay has a big fraud headache. They have a bunch of algorithms (from the pre-ML-hype days) that take a variety of inputs to determine whether a given transaction is fraudulent or not. Presence of remote login service on the user’s computer may tip the scale heavily in this calculation. Fraud detection is a necessary evil for all financial transaction companies in order to keep costs low for everyone else.<p>If you’re worried about privacy, use CCPA’s right to information and ask them for a dump of everything they have on you. They are supposed to give you info that other SPs like Threatmetrix have on you as well if they really are transmitting it to 3rd parties."
+	},
+	{
+		"id": 23442029,
+		"by": "sq_",
+		"parent": 23437567,
+		"time": 1591475787,
+		"type": "comment",
+		"text": "I feel like the only good option at this point when purchasing a prebuilt desktop or a laptop is to nuke the drive and do a clean install of Windows. Seems like the only way to ensure that you&#x27;ve killed the crapware and any partitions meant to preserve&#x2F;reinstall it."
+	},
+	{
+		"id": 23438053,
+		"by": "hazz99",
+		"parent": 23437630,
+		"time": 1591437743,
+		"type": "comment",
+		"text": "To people reading this, many websites rely on websockets for real-time information. They would likely fallback to per-refresh HTTP requests, but it also may break a bunch of sites."
+	}
+]
