@@ -1,0 +1,22 @@
+version: "3"
+services:
+  hacker_news_db:
+    image: mongo:4.0
+    container_name: hacker_news_db
+    ports:
+      - 27017:27017
+    restart: always
+  hacker_news_api:
+    build: ./hackernews-api
+    working_dir: /hackernews-api
+    volumes:
+      - ./hackernews-api:/hackernews-api
+      - ~/.m2:/root/.m2
+    restart: always
+    expose:
+      - 8080
+    depends_on:
+      - hacker_news_db
+    command: mvn clean spring-boot:run
+  
+  
